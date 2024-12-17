@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func commandInspect (cfg *config, args ...string) error {
+func commandInspect(cfg *config, args ...string) error {
 	if len(args) < 1 {
 		return errors.New("no pokemon specified for inspection")
 	}
@@ -23,12 +23,14 @@ func commandInspect (cfg *config, args ...string) error {
 	fmt.Printf("Weight: %v\n", pokemon.Weight)
 	fmt.Printf("Species: %s\n", pokemon.Species.Name)
 	// fmt.Println("Stats: ")
+	fmt.Println("Stats: ")
 	for _, stat := range pokemon.Stats {
 		fmt.Printf("\t- %s: %v\n", stat.Stat.Name, stat.BaseStat)
 	}
 
+	fmt.Println("Types: ")
 	for _, typ := range pokemon.Types {
-		fmt.Printf("\t- %s", typ.Type.Name)
+		fmt.Printf("\t- %s\n", typ.Type.Name)
 	}
 
 	return nil
