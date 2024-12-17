@@ -2,24 +2,35 @@ package pokeapi
 
 import (
 	"encoding/json"
-	"net/http"
+	"fmt"
 	"io"
+	"net/http"
 )
 
 
 
-func GetLocations(pageURL *string) (RespLocations, error) {
-	url := baseURL + "/location-area"
+func (c *Client) GetLocations(pageURL *string) (RespLocations, error) {
+	fullURL := baseURL + "/location-area"
+	
 	if pageURL != nil {
-		url = *pageURL
+		fullURL = *pageURL
 	}
 	
-	res, err := http.Get(url)
+	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
 		return RespLocations{}, err
 	}
 
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return RespLocations{}, err
+	}
 	defer res.Body.Close()
+
+	if res.StatusCode >= 400 {
+		return RespLocations{}, fmt.Errorf("error: %v", res.StatusCode)
+	}
+
 
 	data, err := io.ReadAll(res.Body)
 	if err != nil {
